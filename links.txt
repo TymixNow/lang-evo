@@ -1,0 +1,5 @@
+/home/tymixnow/Documents/projects/python/phonetics/conv_in.md
+/home/tymixnow/Documents/projects/python/phonetics/test.md
+/home/tymixnow/Documents/projects/python/phonetics/sc.txt
+/home/tymixnow/Documents/projects/python/phonetics/output.md
+/home/tymixnow/Documents/projects/python/phonetics/conv_out.md

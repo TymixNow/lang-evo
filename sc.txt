@@ -1,0 +1,11 @@
+```
+EVO
+td > t͡ɕd͡ʑ \ _ i ;
+td > t͡ɕd͡ʑ \ i _ ;
+MET
+l <> mn | mn \ _ ;
+EPE
+0 > e \ mn _ mn ;
+GRM
+adj : k \ _ # ; verb
+```
