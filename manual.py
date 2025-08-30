@@ -17,7 +17,11 @@ def run(coni, inp, cod, outp, cono):
 
     for lineix in range(len(sound_change[0])):
         c = sound_change[1][lineix]
-        if c is None:
+        if sound_change[2][lineix]:
+            delete = sound_change[1][lineix]
+            if delete is not None:
+                vocab.rem_grammar(delete[0])
+        elif c is None:
             vocab.modify(sound_change[0][lineix])
         else:
             (new, old) = c

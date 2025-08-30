@@ -8,4 +8,6 @@ EPE
 0 > e \ mn _ mn ;
 GRM
 adj : k \ _ # ; verb
+DEL
+;verb
 ```

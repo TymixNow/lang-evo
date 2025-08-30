@@ -10,15 +10,17 @@ def combine_funclist(funclist: list[Callable]):
         return combined
     return reduce(combine, funclist, lambda a:a)
 
-def read_sound_change(code: str) -> tuple[list[Callable[[list[phoneme]], list[phoneme]]], list[tuple[str, list[str] | None] | None]]:
-    calls = {"```": "none", "MET": "metath", "EVO": "evolve", "EPE": "epenth", "GRM": "addgrm"}
+def read_sound_change(code: str) -> tuple[list[Callable[[list[phoneme]], list[phoneme]]], list[tuple[str, list[str] | None] | None], list[bool]]:
+    calls = {"```": "none", "MET": "metath", "EVO": "evolve", "EPE": "epenth", "GRM": "addgrm", "DEL": "delgrm"}
     funcs: list[Callable[[list[phoneme]], list[phoneme]]] = []
     grammar_changes: list[tuple[str, list[str] | None] | None] = []
+    delete_grammar: list[bool] = []
     curr_func = "none"
     for line in code.split("\n"):
         if any(line.startswith(a) for a in calls.keys()):
             curr_func = calls[line[0:3]]
             continue
+        delete_grammar.append(False)
         match curr_func:
             case "evolve":
                 [mid_s, rest] = line.split(">",1)
@@ -90,6 +92,10 @@ def read_sound_change(code: str) -> tuple[list[Callable[[list[phoneme]], list[ph
                     old_col_names = [a.strip() for a in old_col_names_s.split(",")]
                 new_col_name = new_col_name_s.strip()
                 grammar_changes.append((new_col_name,old_col_names))
+            case "delgrm":
+                funcs.append(lambda x: x)
+                grammar_changes.append((line.strip().removeprefix(";"),[]))
+                delete_grammar[-1] = True
             case _:
                 pass
-    return (funcs, grammar_changes)
+    return (funcs, grammar_changes, delete_grammar)

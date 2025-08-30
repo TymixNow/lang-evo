@@ -1,10 +1,10 @@
-| noun     |         | verb             |         | adj from verb |          |
-|----------|---------|------------------|---------|---------------|----------|
-| cold     | gumenov | to cool          | gudovi  | chilled       | gudovik  |
-| lock (N) | udda    | to lock          | uddai   | locked        | uddaik   |
-| fluff up | vrad    | to fluff up      | vraJi   | fluffy        | vraJik   |
-| open     | gudda   | to open          | guddai  | opened        | guddaik  |
-| pretty   | guzsad  | to become pretty | guzsaJi | prettier      | guzsaJik |
-| cry      | uvuj    | to cry           | uvuji   | crying        | uvujik   |
-| stand    | sudda   | to stand         | suddai  | standing      | suddaik  |
-| sad      | menli   | to sadden        | zii     | saddened      | ziik     |
+| noun     |         | adj from verb |          |
+|----------|---------|---------------|----------|
+| cold     | gumenov | chilled       | gudovik  |
+| lock (N) | udda    | locked        | uddaik   |
+| fluff up | vrad    | fluffy        | vraJik   |
+| open     | gudda   | opened        | guddaik  |
+| pretty   | guzsad  | prettier      | guzsaJik |
+| cry      | uvuj    | crying        | uvujik   |
+| stand    | sudda   | standing      | suddaik  |
+| sad      | menli   | saddened      | ziik     |
