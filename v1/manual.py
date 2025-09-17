@@ -8,6 +8,10 @@ from vocab import Vocab
 # cod = input("input code file name> ")
 # outp = input("input output file name> ")
 # cono = input("input converter output file name> ")
+def get(a, b):
+    return input(a + " from " + b + " > ")
+def lit(_,b):
+    return b
 def run(coni, inp, cod, outp, cono):
     conv = open(coni, "r").read()
     data = convert_table_to_ipa(open(inp, "r").read(), conv)
@@ -23,9 +27,12 @@ def run(coni, inp, cod, outp, cono):
                 vocab.rem_grammar(delete[0])
         elif c is None:
             vocab.modify(sound_change[0][lineix])
+        elif sound_change[3][lineix]:
+            (new, old) = c
+            vocab.add_grammar(sound_change[0][lineix], lit, new, old)
         else:
             (new, old) = c
-            vocab.add_grammar(sound_change[0][lineix], new, old)
+            vocab.add_grammar(sound_change[0][lineix], get, new, old)
 
     (out, conv_out) = convert_table_from_ipa(write_vocab(vocab), conv)
     open(outp, "w").write(out)

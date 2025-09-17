@@ -18,7 +18,7 @@ class Vocab:
     def modify(self, mod: Callable):
         for word in self:
             self[word[0]] = mod(word[1])
-    def add_grammar(self, mod: Callable, new_header: str, old_headers: list[str] | None = None):
+    def add_grammar(self, mod: Callable, get: Callable, new_header: str, old_headers: list[str] | None = None):
         if old_headers is None: old_headers = [a[0] for a in self.headers]
         old_header_ixs = [[b[0] for b in self.headers].index(a) for a in old_headers]
         new_headers = [(new_header,"") for a in old_headers]
@@ -30,7 +30,7 @@ class Vocab:
                 i = old_header_ixs[ix]
                 cell = line[i]
                 if cell[0] != "":
-                    inp = input(new_headers[ix][0] + " from " + cell[0] + "> ")
+                    inp = get(new_headers[ix][0], cell[0])
                     if inp != "":
                         add.append((inp,mod(cell[1])))
                     else:
@@ -39,6 +39,8 @@ class Vocab:
                     add.append(("", []))
             self.data[j].extend(add)
     def rem_grammar(self, header: str):
+        rems = [i for i in range(len(self.headers)) if self.headers[i][0].strip() == header.strip()]
+        if rems == []: print(rems)
         rem_index = [i for i in range(len(self.headers)) if self.headers[i][0].strip() == header.strip()][0]
         self.headers = self.headers[:rem_index] + self.headers[rem_index + 1:]
         self.data = [line[:rem_index] + line[rem_index + 1:] for line in self.data]

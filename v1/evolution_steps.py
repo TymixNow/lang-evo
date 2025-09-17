@@ -22,12 +22,12 @@ def evolve_leq(pre: list[phoneme_group], mid: list[phoneme_group], post: list[ph
         temp: list[phoneme | None] = [a for a in word]
         for start in starts:
             for index in range(len(repl)):
-                char = matcher[index]
+                char = repl[index]
                 a = temp[start + index + offset]
                 if char is None or a is None:
                     temp[start + index + offset] = None
                 else:
-                    temp[start + index + offset] = a.apply(repl[index])
+                    temp[start + index + offset] = a.apply(char)
         out: list[phoneme] = []
         for ph in temp:
             if ph is not None: out.append(ph)
@@ -51,9 +51,12 @@ def epenthesise(pre: list[phoneme_group], insert: list[phoneme], post: list[phon
     matcher = pre + post
     offset = len(pre)
     def mod(word: list[phoneme]) -> list[phoneme]:
-        starts: set[int] = match_ph(matcher, word, begin, end)
-        out: list[phoneme] = [a for a in word]
-        for start in [a + offset for a in starts]:
-            out = out[:start] + insert + out[start:]
-        return out
+        if word != []:
+            starts: set[int] = match_ph(matcher, word, begin, end)
+            out: list[phoneme] = [a for a in word]
+            for start in [a + offset for a in starts]:
+                out = out[:start] + insert + out[start:]
+            return out
+        else:
+            return []
     return mod

@@ -5,7 +5,7 @@ syll cons appx son
 voice spr_glot con_glot
 cont nas strid lat del_rel
 """
-#0100_0_10_0000_00_1000_100_00000
+#0100_0_10_0000_00_0100_100_10000
 """
 labial round
 coronal ant dist
@@ -43,6 +43,7 @@ class phoneme:
         return (self & mod[1]) | mod[0]
     def __str__(self):
         setrenederer()
+        print("{0:25b}".format(self.data).replace(" ", "0"))
         return dict(zip(phoneme.renderer.values(), phoneme.renderer.keys()))[self]
     def __eq__(self, value: object) -> bool:
         match value:
@@ -55,6 +56,30 @@ class phoneme:
                 return False
     def __hash__(self) -> int:
         return hash(self.data)
+    def __getitem__(self, index: str | int):
+        l_s = "labial coronal dorsal radical round ant dist high low back tense atr rtr syll cons appx son voice spr_glot con_glot cont nas strid lat del_rel"
+        l = [str(x) for x in list(reversed(l_s.split()))]
+        i = 0
+        match index:
+            case int():
+                i = index
+            case str():
+                i = l.index(index)
+            case _:
+                raise TypeError(index)
+        return 1 & self.data >> i == 1
+    def __setitem__(self, index, value):
+        l_s = "labial coronal dorsal radical round ant dist high low back tense atr rtr syll cons appx son voice spr_glot con_glot cont nas strid lat del_rel"
+        l = [str(x) for x in list(reversed(l_s.split()))]
+        i = 0
+        match index:
+            case int():
+                i = index
+            case str():
+                i = l.index(index)
+            case _:
+                raise TypeError(index)
+        self.data = (int(value) << i | self.data) & (~ int(not value) << i)
 phoneme_mod = tuple[phoneme,phoneme]
 phoneme_group = phoneme_mod
 class IPA:
@@ -272,7 +297,7 @@ class IPA:
         for (sym, cons) in list(zip(ipa_consonants.keys(), ipa_consonants.values())):
             if cons.apply(mod) not in ipa_consonants.values() and cons.apply(mod) not in temp.values():
                 temp[sym+alt] = cons.apply(mod)
-    ipa_consonants = temp
+        ipa_consonants = temp
     ipa_vowels: dict[str,phoneme] = {
         "i": phoneme(vow_high, vowel_manner),
         "y": phoneme(vow_high | vow_rounded, vowel_manner),
@@ -298,9 +323,13 @@ class IPA:
         for (sym, vow) in list(zip(ipa_vowels.keys(), ipa_vowels.values())):
             if vow.apply(mod) not in ipa_vowels.values() and vow.apply(mod) not in temp.values():
                 temp[sym+alt] = vow.apply(mod)
-    ipa_vowels = temp
+        ipa_vowels = temp
     ipa = ipa_consonants
     ipa.update(ipa_vowels)
+
+def normalise(ph: phoneme):
+    deps = {"labial": ["round"], "coronal": ["ant", "dist"], "dorsal": ["high", "low", "back", "tense"], "radical": ["atr", "rtr"]}
+    deps.update({"cons": ["appx", "strid", "del_rel"], })
 def group(phonemes: list[phoneme]):
     a = reduce(phoneme.__and__, phonemes)
     b = reduce(phoneme.__or__, phonemes)

@@ -1,0 +1,45 @@
+command:
+  subcommands:
+    - abbv: SEL
+      type: 
+        in: str
+        out: bool
+    - abbv: VAL
+      type:
+        in: word
+        out: word
+    - abbv: KEY
+      type:
+        in: str
+        out: str
+    - abbv: DEL
+      type:
+        in: str
+        out: bool
+    - abbv: CPY
+      type:
+        in: str
+        out: str
+  methods:
+    - abbv: MET
+      type: 
+        in: word
+        out: word
+    - abbv: EVO
+      type: 
+        in: word
+        out: word
+    - abbv: EPE
+      type: 
+        in: word
+        out: word
+    - abbv: LST
+      type: 
+        in: str
+        out: bool
+    - abbv: ADD
+      type: 
+        in: str
+        out: str
+    
+

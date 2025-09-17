@@ -10,17 +10,19 @@ def combine_funclist(funclist: list[Callable]):
         return combined
     return reduce(combine, funclist, lambda a:a)
 
-def read_sound_change(code: str) -> tuple[list[Callable[[list[phoneme]], list[phoneme]]], list[tuple[str, list[str] | None] | None], list[bool]]:
+def read_sound_change(code: str) -> tuple[list[Callable[[list[phoneme]], list[phoneme]]], list[tuple[str, list[str] | None] | None], list[bool], list[bool]]:
     calls = {"```": "none", "MET": "metath", "EVO": "evolve", "EPE": "epenth", "GRM": "addgrm", "DEL": "delgrm"}
     funcs: list[Callable[[list[phoneme]], list[phoneme]]] = []
     grammar_changes: list[tuple[str, list[str] | None] | None] = []
     delete_grammar: list[bool] = []
+    lits: list[bool] = []
     curr_func = "none"
     for line in code.split("\n"):
         if any(line.startswith(a) for a in calls.keys()):
             curr_func = calls[line[0:3]]
             continue
         delete_grammar.append(False)
+        lits.append(False)
         match curr_func:
             case "evolve":
                 [mid_s, rest] = line.split(">",1)
@@ -35,7 +37,7 @@ def read_sound_change(code: str) -> tuple[list[Callable[[list[phoneme]], list[ph
                 (mid_l, pre_l, post_l) = ([gr.strip() for gr in part.split("|")] for part in (mid_s,pre_s,post_s))
                 (mid_l, pre_l, post_l) = (a if a != [""] else [] for a in (mid_l, pre_l, post_l))
                 (mid,pre,post) = tuple(([group(split_ipa(gr)) for gr in l] for l in (mid_l, pre_l, post_l)))
-                repl = [group(split_ipa(gr.strip())) if gr.strip != "" else None for gr in repl_s.split("|")]
+                repl = [group(split_ipa(gr.strip())) if gr.strip() != "" else None for gr in repl_s.split("|")]
                 funcs.append(evolve_leq(pre,mid,post,repl,begin,end))
                 grammar_changes.append(None)
             case "metath":
@@ -73,7 +75,9 @@ def read_sound_change(code: str) -> tuple[list[Callable[[list[phoneme]], list[ph
                 [new_col_name_s, rest] = line.split(":",1)
                 [insert_s, rest] = rest.split("\\",1)
                 [pre_s, rest] = rest.split("_", 1)
-                [post_s, old_col_names_s] = rest.split(";", 1)
+                [post_s, old_col_names_s, lit] = rest.split(";", 2)
+
+                lits[-1] = lit.strip() == "lit"
 
                 (insert_s, pre_s, post_s) = (a.strip() for a in (insert_s,pre_s,post_s))
                 begin = pre_s.startswith("#")
@@ -98,4 +102,4 @@ def read_sound_change(code: str) -> tuple[list[Callable[[list[phoneme]], list[ph
                 delete_grammar[-1] = True
             case _:
                 pass
-    return (funcs, grammar_changes, delete_grammar)
+    return (funcs, grammar_changes, delete_grammar, lits)
